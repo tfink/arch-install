@@ -10,5 +10,8 @@ dhcpcd wlp6s0
 timedatectl set-ntp true
 
 # clear disk and create partitions
-sgdisk -Zg /dev/sda
-sgdisk -n 1:0:+512M -t  /dev/sda
+sgdisk -Z /dev/sda
+sgdisk -n 0:0:+512M -t 0:ef00 -c 0:"EFI System partition" /dev/sda
+sgdisk -n 0:0:+16G -t 0:8200 -c 0:"Swap" /dev/sda
+sgdisk -n 0:0:0 -t 0:8300 -c 0:"Data" /dev/sda
+partprobe /dev/sda
