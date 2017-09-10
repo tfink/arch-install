@@ -6,7 +6,6 @@ PARTITION_SIZE_SWAP="+16G"
 
 LVM_SIZE_VAR="10G"
 LVM_SIZE_TMP="10G"
-LVM_SIZE_ROOT="100%FREE"
 
 # use german keymap
 loadkeys de-latin1-nodeadkeys
@@ -30,7 +29,7 @@ partprobe $DEVICE
 vgcreate VolGroup00 ${PARTITION_PREFIX}3
 lvcreate -L ${LVM_SIZE_VAR} --name=var VolGroup00
 lvcreate -L ${LVM_SIZE_TMP} --name=tmp VolGroup00
-lvcreate -L ${LVM_SIZE_ROOT} --name=root VolGroup00
+lvcreate -l 100%FREE --name=root VolGroup00
 
 # format partitions, volumes and swap
 mkfs.fat -F 32 ${PARTITION_PREFIX}1
