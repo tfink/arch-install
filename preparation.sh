@@ -28,24 +28,24 @@ partprobe $DEVICE
 
 # setup LVM
 vgcreate VolGroup00 ${PARTITION_PREFIX}3
-lvcreate -L ${LVM_SIZE_VAR} VolGroup00 lvol-var
-lvcreate -L ${LVM_SIZE_TMP} VolGroup00 lvol-tmp
-lvcreate -L ${LVM_SIZE_ROOT} VolGroup00 lvol-root
+lvcreate -L ${LVM_SIZE_VAR} --name=var VolGroup00
+lvcreate -L ${LVM_SIZE_TMP} --name=tmp VolGroup00
+lvcreate -L ${LVM_SIZE_ROOT} --name=root VolGroup00
 
 # format partitions, volumes and swap
 mkfs.fat -F 32 ${PARTITION_PREFIX}1
-mkfs.ext4 -L "root" /dev/mapper/VolGroup00-lvol-root
-mkfs.ext4 -L "var" /dev/mapper/VolGroup00-lvol-var
-mkfs.ext4 -L "tmp" /dev/mapper/VolGroup00-lvol-tmp
+mkfs.ext4 -L "root" /dev/VolGroup00/root
+mkfs.ext4 -L "var" /dev/VolGroup00/var
+mkfs.ext4 -L "tmp" /dev/VolGroup00/tmp
 mkswap ${PARTITION_PREFIX}2
 swapon ${PARTITION_PREFIX}2
 
 # mount
-mount /dev/mapper/VolGroup00-lvol-root /mnt
+mount /dev/VolGroup00/root /mnt
 mkdir -p /mnt/boot /mnt/var /mnt/tmp
 mount ${PARTITION_PREFIX}1 /mnt/boot
-mount /dev/mapper/VolGroup00-lvol-var /mnt/var
-mount /dev/mapper/VolGroup00-lvol-tmp /mnt/tmp
+mount /dev/VolGroup00/var /mnt/var
+mount /dev/VolGroup00/tmp /mnt/tmp
 
 # install packages
 pacstrap /mnt base
