@@ -27,7 +27,7 @@ sgdisk -n 0:0:0 -t 0:8300 -c 0:"Data" $DEVICE
 partprobe $DEVICE
 
 # setup LVM
-vgcreate VolGroup00 $]PARTITION_PREFIX}3
+vgcreate VolGroup00 ${PARTITION_PREFIX}3
 lvcreate -L ${LVM_SIZE_VAR} VolGroup00 lvol-var
 lvcreate -L ${LVM_SIZE_TMP} VolGroup00 lvol-tmp
 lvcreate -L ${LVM_SIZE_ROOT} VolGroup00 lvol-root
