@@ -5,22 +5,20 @@ ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 hwclock --systohc
 
 # localizations
-nano /etc/locale.gen
-#sed ...
+sed s/^#de_DE.UTF-8/de_DE.UTF-8/ /etc/locale.gen
 locale-gen
 
 echo "KEYMAP=de-latin1" > /etc/vconsole.conf
 echo "tfink-laptop" > /etc/hostname
 
 # add sd-lvm2 to initramfsnt/boot
-nano /etc/mkinitcpio.conf
-#sed ...
+sed s/block filesystems/block sd-lvm2 filesystems/ /etc/mkinitcpio.conf
 mkinitcpio -p linux
 
 # root password
 passwd
 
-pacman -S intel-ucode
+pacman -Sy intel-ucode
 
 # boot loader
 bootctl install
@@ -29,9 +27,9 @@ nano /boot/loader/loader.conf
 #timeout 0
 #editor 0
 
-nano /boot/loader/entries/arch-lvm.conf
+nano /boot/loader/entries/arch.conf
 #title   Arch Linux
 #linux   /vmlinuz-linux
 #initrd  /intel-ucode.img
 #initrd  /initramfs-linux.img
-#options root=/dev/mapper/VolGroup00-lvol_root rw
+#options root=/dev/mapper/VolGroup00-root rw
