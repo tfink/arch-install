@@ -1,19 +1,14 @@
-DEVICE="/dev/sda"
-PARTITION_PREFIX="/sev/sda"
+DEVICE="/dev/mmcblk0"
+PARTITION_PREFIX="/dev/mmcblk0p"
 
 PARTITION_SIZE_BOOT="+512M"
-PARTITION_SIZE_SWAP="+16G"
+PARTITION_SIZE_SWAP="+1G"
 
-LVM_SIZE_VAR="10G"
-LVM_SIZE_TMP="10G"
+LVM_SIZE_ROOT="1G"
+LVM_SIZE_TMP="1G"
 
 # use german keymap
 loadkeys de-latin1-nodeadkeys
-
-# connect to wireless network
-ip link set wlp6s0 up
-wpa_supplicant -B -i wlp6s0 -c<(wpa_passphrase "wireless network" "password")
-dhcpcd wlp6s0
 
 # set time
 timedatectl set-ntp true
@@ -27,9 +22,9 @@ partprobe $DEVICE
 
 # setup LVM
 vgcreate VolGroup00 ${PARTITION_PREFIX}3
-lvcreate -L ${LVM_SIZE_VAR} --name=var VolGroup00
+lvcreate -L ${LVM_SIZE_ROOT} --name=root VolGroup00
 lvcreate -L ${LVM_SIZE_TMP} --name=tmp VolGroup00
-lvcreate -l 100%FREE --name=root VolGroup00
+lvcreate -l 100%FREE --name=var VolGroup00
 
 # format partitions, volumes and swap
 mkfs.fat -F 32 ${PARTITION_PREFIX}1
