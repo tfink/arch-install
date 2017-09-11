@@ -5,14 +5,14 @@ ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 hwclock --systohc
 
 # localizations
-sed -i s/^#de_DE.UTF-8/de_DE.UTF-8/ /etc/locale.gen
+sed -i 's/^#(de_DE\.UTF-8)/\1/' /etc/locale.gen
 locale-gen
 
 echo "KEYMAP=de-latin1-nodeadkeys" > /etc/vconsole.conf
 echo "tfink-srv-1" > /etc/hostname
 
 # add sd-lvm2 to initramfs/boot
-sed s/block filesystems/block sd-lvm2 filesystems/ /etc/mkinitcpio.conf
+sed 's/block filesystems/block sd-lvm2 filesystems/' /etc/mkinitcpio.conf
 mkinitcpio -p linux
 
 # root password
@@ -33,5 +33,5 @@ title   Arch Linux
 linux   /vmlinuz-linux
 initrd  /intel-ucode.img
 initrd  /initramfs-linux.img
-options root=/dev/mapper/VolGroup00-root rw
+options root=PARTUUID=??????-????-????-????-???????????? rw
 EOT
